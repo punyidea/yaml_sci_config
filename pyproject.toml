@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "yaml-sci-config"
+version = "0.1.0"
+description = "Definition of methods that allow easy loading of projects as config files."
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    { name = "Victor Prieto", email = "vsprieto@gmail.com" }
+]
+dependencies = [
+    "ruamel.yaml>=0.17.40",
+    "numpy"# Example dependency
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/yourproject"
