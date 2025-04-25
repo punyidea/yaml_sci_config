@@ -3,6 +3,7 @@ import unittest
 from nptyping.ndarray import NDArray
 
 import yaml_sci_config.interface_classes
+import yaml_sci_config.load_save
 from yaml_sci_config import yaml_interface
 from yaml_sci_config.yaml_interface import yaml_dataclass
 from yaml_sci_config.interface_classes import FunctionHandle, PartialFunctionHandle, LogspaceParams
@@ -54,7 +55,7 @@ class MyTestCase(unittest.TestCase):
         '''
 
         test_yaml = test_yaml_a + test_yaml_b  + test_yaml_c
-        test_read =  yaml_interface.yaml_load(test_yaml)
+        test_read =  yaml_sci_config.load_save.yaml_load(test_yaml)
 
         comparison = TestYamlSubtype(test_type1=24,test_type2=25)
         self.assertEqual(test_read['test_a'],comparison)
@@ -62,7 +63,7 @@ class MyTestCase(unittest.TestCase):
         comparison_b = TestYamlPostinit(test_type1=24,test_type2=25)
         self.assertEqual(test_read['test_b'].test_type3,49)
         self.assertEqual(test_read['test_b'],comparison_b)
-        test_yaml_dump = yaml_interface.yaml_dumps({'test_a':comparison})
+        test_yaml_dump = yaml_sci_config.load_save.yaml_dumps({'test_a':comparison})
 
         comparison_c = TestYamlSubsubclass(a=4, test_type1=24,test_type2=25)
         self.assertEqual(test_read['test_c'],comparison_c)
@@ -86,7 +87,7 @@ func: !FunctionHandle
 b: 3
 '''
 
-        test_read = yaml_interface.yaml_load(test_yaml)
+        test_read = yaml_sci_config.load_save.yaml_load(test_yaml)
         sum_axis = test_read['partial_func'](np.array([[1,2,3],[4,5,6]]))
         np.testing.assert_array_equal(sum_axis,[6,15])
         sum_no_axis= test_read['func'](np.array([[1,2,3],[4,5,6]]))
@@ -98,8 +99,8 @@ b: 3
         func_hand = FunctionHandle.init_from_function_handle(s)
         part_func = PartialFunctionHandle.init_from_function_handle(s, axis=-1)
         dict_out = {'func': func_hand, 'partial_func': part_func}
-        str_out = yaml_interface.yaml_dumps(dict_out)
-        loaded_obj = yaml_interface.yaml_load(str_out)
+        str_out = yaml_sci_config.load_save.yaml_dumps(dict_out)
+        loaded_obj = yaml_sci_config.load_save.yaml_load(str_out)
         self.assertEqual(loaded_obj['func'],func_hand)
         self.assertEqual(loaded_obj['partial_func'],part_func)
         #print(str_out)
@@ -107,8 +108,8 @@ b: 3
     def test_class_subtype(self):
         A = TestYamlPostinit(test_type1=24,test_type2=25)
         B = yaml_sci_config.interface_classes.PartialClassObject.init_from_class(TestYamlPostinit, test_type1=24)
-        str_out = yaml_interface.yaml_dumps({'B':B})
-        loaded_obj = yaml_interface.yaml_load(str_out)
+        str_out = yaml_sci_config.load_save.yaml_dumps({'B':B})
+        loaded_obj = yaml_sci_config.load_save.yaml_load(str_out)
         assert not loaded_obj['B'].args
         loaded_obj['B'].args =  tuple()
         self.assertEqual(loaded_obj['B'],B)
@@ -127,7 +128,7 @@ b: 3
             function_name: "sum"
         '''
 
-        loaded = yaml_interface.yaml_load(yaml_str)
+        loaded = yaml_sci_config.load_save.yaml_load(yaml_str)
         assert (loaded['list_elem'] ==[2,3, 36])
         np.testing.assert_array_almost_equal(loaded['np_arr_explicit'],np.array([2,3,26]))
         assert (loaded['complex_val'] == (5+2.3j))

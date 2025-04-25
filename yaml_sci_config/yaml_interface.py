@@ -1,13 +1,11 @@
 import re
-from dataclasses import _MISSING_TYPE, is_dataclass, fields
+from dataclasses import _MISSING_TYPE, fields
 from ruamel.yaml.representer import TaggedScalar
 
 import numpy as np
 #import pinn_gencases.utils.domains_interface import yaml_classes
 
 #import pinn_gencases.utils.domains_interface, pinn_gencases.utils.var_form_interface
-from ruamel.yaml import RoundTripConstructor, CommentedMap
-import argparse
 #from pinn_gencases.interface.general_interface import YAML_struct
 
 
@@ -16,7 +14,6 @@ from dataclasses import dataclass, is_dataclass
 import ruamel.yaml
 
 from typing import get_type_hints
-
 
 yaml_preset = ruamel.yaml.YAML(typ='rt')
 
@@ -149,76 +146,6 @@ def setup_yaml(yaml,custom_types):
 def register_yaml_classes(yaml,classes_register):
    for class_reg in classes_register:
        yaml.register_class(class_reg)
-
-def yaml_load_fname(fname):
-    with open(fname,'r') as filep:
-        par_obj = yaml_load(filep)
-    return par_obj
-
-
-def yaml_save_fname(yaml_obj,fname):
-    with open(fname,'w') as fout:
-        yaml_dump(yaml_obj,fout)
-
-
-def yaml_load(fin,yaml = yaml_preset, custom_setup=True):
-    '''
-    A convenient wrapper around yaml.load().
-    Note that fin, just as for yaml.load(), accepts strings as well as file objects.
-    Assumes globally setup yaml is used. 
-    If we want to start from scratch and configure new YAML instance,
-        we set yaml=None. custom_setup 
-        then will setup yaml to deal with custom types
-    '''
-    if yaml is None: # note: not default.
-        yaml = ruamel.yaml.YAML(typ='rt')
-        if custom_setup:
-            setup_yaml(yaml, custom_types)
-        #TODO: register the extra classes too.
-    return yaml.load(fin)
-
-
-def yaml_dump(obj,fout, yaml= yaml_preset,custom_setup=True):
-    '''
-    Assumes globally setup yaml is used. 
-    If we want to start from scratch and configure new YAML instance,
-        we set yaml=None. custom_setup 
-        then will setup yaml to deal with custom types
-    '''
-    if yaml is None: # note: not default.
-        yaml = ruamel.yaml.YAML(typ='rt')
-    if custom_setup:
-        setup_yaml(yaml, custom_types)
-    return yaml.dump(obj,fout)
-
-def yaml_dumps(obj,options=None):
-    '''
-    Dump yaml into a string instead of a file object
-    '''
-    if options == None: options = {}
-
-    from io import StringIO
-    string_stream = StringIO()
-    yaml_preset.dump(obj, string_stream, **options)
-    output_str = string_stream.getvalue()
-    string_stream.close()
-    return output_str
-
-
-
-def parse_args_cli():
-    '''
-    Adds functionality to a file, to read in parameters from a yaml file.
-    Adds requirement to file, that it is executed with either "-y FNAME" or "--yaml_fname FNAME,"
-        where FNAME is the name of the YAML parameter file where parameters are stored
-    :return: params_yml: the native output of PYYAML after
-            args: list of all arguments provided to the script
-    '''
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-y','--yaml_fname',required=True)
-    args = parser.parse_args()
-    params_yml = yaml_load_fname(args.yaml_fname)
-    return params_yml,args
 
 
 def yaml_dataclass(cls=None, yaml=yaml_preset, **dataclass_kwargs):

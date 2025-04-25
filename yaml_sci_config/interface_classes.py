@@ -6,6 +6,7 @@ from dataclasses import field
 from functools import partial
 from inspect import isclass
 from typing import Callable, Any
+import os
 
 import numpy as np
 
@@ -205,11 +206,11 @@ class ClassObject:
             cls = getattr(module, self.class_name)
             if not isclass(cls):
                 raise ValueError(
-                    'The class given: (module: {.module_name}, class: {.function_name}) does not seem to be a class'.format(
+                    'The class given: (module: {.module_name}, class: {.class_name}) does not seem to be a class'.format(
                         self, self))
             return cls
         except AttributeError:
-            raise NameError('Class {.function_name} not found in module {.module_name}'.format(self, self))
+            raise NameError('Class {.class_name} not found in module {.module_name}'.format(self, self))
 
     def __call__(self, *args: Any, **kwds: Any) -> Any:
         return self._cls(*args, **kwds)  # return instance of the class with relevant arguments.
@@ -313,8 +314,12 @@ class IOParams:
     :param prefix: str
       everything output by this program will have this common prefix added in its filename.
     '''
-    out_dir: str
-    prefix: str
+    out_dir: str = ''
+    prefix: str = ''
+    def __post_init__(self) -> None:
+        if not self.out_dir:
+            out_dir = os.getcwd()
+            self.out_dir = out_dir
 
 
 @yaml_dataclass
