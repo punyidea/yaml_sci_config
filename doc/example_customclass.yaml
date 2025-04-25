@@ -1,0 +1,3 @@
+b: !CustomDataclass
+    field1: "biscuit"
+    field2: [2,3,4]

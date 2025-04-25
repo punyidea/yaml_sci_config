@@ -1,0 +1,5 @@
+a: !FunctionHandle
+  module_name: numpy
+  function_name: sum
+b: [2e-4, 5.3e-4+2i, 52]
+c: 24
