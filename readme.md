@@ -1,7 +1,7 @@
 # yaml_sci_config
 
-This project aims to make it easy to make config files for scientific computing.
-The files support numpy arrays as inputs, complex numbers, and scientific notation, like numpy`s parsers
+This python project aims to make it easy to make config files for scientific computing.
+The files support numpy arrays as inputs, complex numbers, and scientific notation, like numpy`s parsers.
 
 # Documentation
 
