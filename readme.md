@@ -6,7 +6,7 @@ The files support numpy arrays as inputs, complex numbers, and scientific notati
 # Documentation
 
 ## Getting started
-There is a jupyter notebook called document called getting_started which is also saved as pdf.
+There is a jupyter notebook called document called getting_started which is also saved as html.
 
 ## Classes
 
